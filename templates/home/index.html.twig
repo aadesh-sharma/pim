@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}HOME{% endblock %}
+
+{% block body %}
+
+
+<div class="jumbotron">
+    <h1><center>WELCOME</center><h1>
+    <center><a href="{{ path('app_register') }}"><span  class="btn btn-success">Signup</span></a>
+	<a  href="{{ path('app_login') }}"><span class="btn btn-success" >Login</span></a></center>
+</div>
+{% endblock %}

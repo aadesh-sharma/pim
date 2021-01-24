@@ -1,0 +1,155 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PRODUCT{% endblock %}
+
+{% block body %}
+  
+<div class="container">
+  <div class="row">
+    <div class="row">
+     {% for product in product %}
+      <div class="col-md-6">
+        <div class="w3-row-padding">
+          <div class="w3-third w3-container w3-margin-bottom">
+            <img src="/uploads/products/{{product.getPostThumbnail()}}" alt="Noimg" style="width:100%" class="w3-hover-opacity">
+             <div class="w3-container w3-white">
+                <p><b>Lorem Ipsum</b></p>
+                <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+             </div>
+          </div>
+        <div class="w3-third w3-container w3-margin-bottom">
+            <img src="/w3images/lights.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
+        <div class="w3-container w3-white">
+            <p><b>Lorem Ipsum</b></p>
+            <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+        </div>
+      </div>
+    <div class="w3-third w3-container">
+      <img src="/w3images/nature.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      <div class="w3-container w3-white">
+        <p><b>Lorem Ipsum</b></p>
+        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+      </div>
+    </div>
+  </div>
+  <div>
+      {% endfor %}
+        </div>
+   </div>
+</div>
+  
+
+  {% endblock %}
+{% block javascripts %}{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% extends 'base.html.twig' %}
+
+{% block title %}PRODUCT{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="row">
+            {% for product in product %}
+                <div class="col-md-6">
+                    <div class="jumbotron">
+                        <div class="col-sm-8">
+                            <div class="card-body d-flex flex-column align-items-start">
+                                {# <strong class="d-inline-block mb-2 text-primary">World</strong> #}
+                                <h2 class="mb-0">
+                                    {{product.getName()}}
+                                </h2>
+                                <div class="card-text mb-auto">ABOUT:{{product.getShortdescription()}}</div>
+                                <p class="card-text mb-auto">DETAIL:{{product.getlongdescription()|striptags|slice(0, 50)}}</p>
+                                <p class="card-text mb-auto">COLOR:{{product.getColor()}}</p>
+                                <p class="card-text mb-auto">PRICE:{{product.getPrice()}}</p>
+                                <p class="card-text mb-auto">{{product.getPrice()}}</p>
+                                <p class="card-text mb-auto">{{product.getTax()}}</p>
+                                <p class="card-text mb-auto">{{product.getDeliverycharges()}}</p>
+                                <p class="card-text mb-auto">{{product.getDiscount()}}</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-4"><img  alt="Thumbnail [200x250]" style="max-width: 100%;" src="/uploads/products/{{product.getPostThumbnail()}}" data-holder-rendered="true">
+                               <p class="card-text mb-auto">Brand:{{product.getBrand()}}</p>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% extends 'base.html.twig' %}
+
+{% block title %}PRODUCT{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="row">
+            {% for product in product %}
+                <div class="col-md-6">
+                    
+                         <div class="rows">
+                           <div class="col-md-12">
+                               <img  alt="Thumbnail [200x250]" style="max-width: 100%;" src="/uploads/products/{{product.getPostThumbnail()}}" data-holder-rendered="true">
+                               <p class="card-text mb-auto">Brand:{{product.getBrand()}}</p>
+                            </div>
+                        </div>
+                        <div class="rows">
+                           <div class="col-md-12">
+                               <div class="card-body d-flex flex-column align-items-start">
+                                {# <strong class="d-inline-block mb-2 text-primary">World</strong> #}
+                                <h2 class="mb-0">
+                                    {{product.getName()}}
+                                </h2>
+                                
+                                 <p class="card-text mb-auto">ABOUT:{{product.getShortdescription()}}
+                                <p class="card-text mb-auto">DETAIL:{{product.getlongdescription()|striptags|slice(0, 50)}}</p>
+                                <p class="card-text mb-auto">COLOR:{{product.getColor()}}        PRICE:{{product.getPrice()}}</p>
+                                <p class="card-text mb-auto">DISCOUNT:{{product.getDiscount()}}  DELIVERY CHARGE:{{product.getDeliverycharges()}}</p>
+                               
+                                </div>
+                            </div>
+                        </div>  
+                </div>                  
+                
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}{% endblock %}

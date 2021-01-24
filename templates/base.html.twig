@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	
+	<title>{% block title %}Project{% endblock %}</title>
+    {% block stylesheets %}
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Cabin:400,700" rel="stylesheet">
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- Custom stlylesheet 
+	<link type="text/css" rel="stylesheet" href="{{asset('css/style.css')}}" /> -->
+    {% endblock %}
+</head>
+
+<body>
+    
+      <div class="container text-center " >
+         <h1>PRODUCT INFORMATION MANAGEMENT</h1>      
+         
+    </div>
+
+	
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="{{ path('home') }}"><span class="glyphicon glyphicon-home"></span>Project</a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">	
+					<ul class="nav navbar-nav">
+						{% if is_granted('IS_AUTHENTICATED_FULLY') and (app.user.isVerified())%}
+							 <li><a href="{{ path('published_products') }}">Published Products</a></li> 
+							{# <li><a href="#">published Products</a></li> #}
+						{% endif %}
+						{% if (is_granted('ROLE_MANAGER'))%}
+							{# <li><a href="{{ path('create_post') }}">see Post</a></li> #}
+							<li><a href="{{ path('category_index') }}">your categories</a></li>
+							<li><a href="{{path('product_index')}}"> your Products</a></li>
+						{% endif %}
+
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+        
+					<ul class="nav navbar-nav navbar-right">
+						{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+							<li><a href="{{ path('app_logout') }}">Logout</a></li>
+						{% else %}
+							<li><a href="{{ path('app_register') }}"><span class="glyphicon glyphicon-user"></span>Signup</a></li>
+							<li><a href="{{ path('app_login') }}">Login</a></li>
+						{% endif %}
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<div class="container" style="padding-left:0px;">
+            {% block body %}{% endblock %}
+		</div>
+		<footer class="navbar-fixed-bottom">
+			<div class="container text-center">&copy; Copyright 2021 Developed by GROUP1</div>
+	   </footer>
+	
+
+
+
+	{% block javascripts %}
+	<script src="https://use.fontawesome.com/63d6908806.js"></script>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  {% endblock %}
+</body>
+</html>

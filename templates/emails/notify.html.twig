@@ -1,0 +1,17 @@
+{% extends '@email/default/notification/body.html.twig' %}
+{% block content %}
+    
+
+{% for message in app.flashes('notification') %}
+
+<div class="alert alert-info alert-dismissible fade show">
+
+{{ message }}
+{{comment}}
+<button type="button" class="close" data-dismiss="alert" aria-
+label="Close"><span aria-hidden="true">&times;</span></button>
+
+</div>
+{% endfor %}
+
+{% endblock %}

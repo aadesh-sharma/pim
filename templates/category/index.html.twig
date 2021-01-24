@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Category index{% endblock %}
+
+{% block body %}
+    <h1>Category index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                {# <th>Description</th> #}
+                <th>CountryOrigin</th>
+                <th>Size</th>
+                <th>Popularity</th>
+                <th>Language</th>
+                <th>Status</th>
+                <th>SpecialNotes</th>
+                <th>Created</th>
+                <th>Updated</th>
+                <th>Att1</th>
+                <th>Att2</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        
+        {% for category in categories %}
+            <tr>
+                <td>{{ category.id }}</td>
+                <td>{{ category.name }}</td>
+                {# <td>{{ category.description }}</td> #}
+                <td>{{ category.countryOrigin }}</td>
+                <td>{{ category.size }}</td>
+                <td>{{ category.popularity }}</td>
+                <td>{{ category.language }}</td>
+                <td>{{ category.status }}</td>
+                <td>{{ category.specialNotes }}</td>
+                <td>{{ category.created ? category.created|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ category.updated ? category.updated|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ category.att1 }}</td>
+                <td>{{ category.att2 }}</td>
+                <td>
+                    <a href="{{ path('category_show', {'id': category.id}) }}">show</a>
+                    <a href="{{ path('category_edit', {'id': category.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="13">no Category assigned to you.Contact admin.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {# <a href="{{ path('category_new') }}">Create new</a> #}
+{% endblock %}

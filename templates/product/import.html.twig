@@ -1,0 +1,25 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block page_title %}{{page_title}}{% endblock %}
+{% block page_actions %}
+    <a href={{back_link}} class="btn btn-primary" >Back</a>
+{% endblock %}
+{% block page_content %}
+    {{ form_start(form) }}
+        <div class="field-image form-group">
+            <legend class="col-form-label">{{form_label(form.import_file)}}</legend>
+            <div class="form-widget">
+                <div class="form-group">
+                    <div class="custom-file">{{form_widget(form.import_file, {attr: {class: 'form-control'}})}}</div>
+                    {{form_errors(form.import_file)}}
+                </div>
+            </div>
+            <legend class="col-form-label"></legend>
+            <div class="form-widget">
+                <div class="form-group">
+                    <div class="custom-file">{{form_widget(form.import)}}</div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
