@@ -75,16 +75,13 @@
                 <th>Updated</th>
                 <td>{{ product.updated ? product.updated|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
-            <tr>
-                <th>Image</th>
-                <td>{{ product.image }}</td>
-            </tr>
+            
         </tbody>
     </table>
 
-    <a href="{{ path('product_index') }}">back to list</a>
+    <a href="{{ path('product_index') }}" class="btn btn-success">back to list</a>
 
-    <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a>
+    <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-success">edit</a>
 
     {{ include('product/_delete_form.html.twig') }}
 {% endblock %}

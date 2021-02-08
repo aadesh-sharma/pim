@@ -153,3 +153,78 @@
 </div>
 {% endblock %}
 {% block javascripts %}{% endblock %}
+
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="row">
+            {% for category in categories %}
+                <div class="col-md-6">
+                    <div class="jumbotron">
+                        <div class="col-sm-8">
+                            <div class="card-body d-flex flex-column align-items-start">
+                                {# <strong class="d-inline-block mb-2 text-primary">World</strong> #}
+                                <h3 class="mb-0">
+                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                    <a class="text-dark" href="{{path('show_category', {id: category.getId()})}}">{{category.getCategoryName()}}</a>
+                                {% else %}
+                                     <a onclick="alert('Please Register/Login')" class="text-dark" href="{{path('home')}}">{{category.getCategoryName()}}</a>
+
+                                {% endif %}
+                                </h3>
+                                <div class="mb-1 text-muted">{{category.getCreated()|date(date_format)}}</div>
+                                <p class="card-text mb-auto">{{category.getDescription()|striptags|slice(0, 50)}}</p>
+                               {# <a href="{{path('show_category', {id: category.getId()})}}">Continue reading</a>#}
+                            </div>
+                        </div>
+                        <div class="col-sm-4"><img data-src="holder.js/200x250?theme=thumb" alt="Thumbnail [200x250]" style="max-width: 100%;" src="{{asset('uploads/posts/')}}{{ category.getCategoryThumbnail()}}" data-holder-rendered="true"></div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+
+
+
+{% extends 'base.html.twig' %}
+
+{% block title %}PRODUCT{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="row">
+            {% for product in product %}
+                <div class="col-md-6">
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="/uploads/products/{{product.getPostThumbnail()}}"alt="Card image cap">
+                        <div class="card-body">
+                            <h2 class="card-title">{{product.getName()}}</h2>
+                             
+                                <p >ABOUT:{{product.getShortdescription()}}<br>
+                                COLOR:{{product.getColor()}} <br>       PRICE:{{product.getPrice()}}<br>
+                                DISCOUNT:{{product.getDiscount()}} <br> DELIVERY CHARGE:{{product.getDeliverycharges()}}</p>
+                               
+
+                            <p class="card-text">DETAIL:{{product.getlongdescription()|striptags|slice(0, 50)}}</p>
+                            <a href="#" class="btn btn-primary">BUY</a>
+                        </div>
+                    </div>
+                  <div><br></div>
+                </div>
+                
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+
+                        
+{% endblock %}
+{% block javascripts %}{% endblock %}

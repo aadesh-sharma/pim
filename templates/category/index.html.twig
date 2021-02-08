@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Category index</h1>
 
-    <table class="table">
+    <table class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th>Id</th>
@@ -42,8 +42,8 @@
                 <td>{{ category.att1 }}</td>
                 <td>{{ category.att2 }}</td>
                 <td>
-                    <a href="{{ path('category_show', {'id': category.id}) }}">show</a>
-                    <a href="{{ path('category_edit', {'id': category.id}) }}">edit</a>
+                    <a href="{{ path('category_show', {'id': category.id}) }}" class="btn btn-primary" style="padding:5px;margin-bottom:5px;">show</a>
+                    <a href="{{ path('category_edit', {'id': category.id}) }}" class="btn btn-primary" style="padding:5 5px;">edit</a>
                 </td>
             </tr>
         {% else %}

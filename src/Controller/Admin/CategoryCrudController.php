@@ -14,6 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
@@ -62,12 +63,28 @@ class CategoryCrudController extends AbstractCrudController
             //  ->setPermission(Action::EDIT, 'ROLE_MANAGER')
              ->add(Crud::PAGE_INDEX, $exportCategoryButton)
              ->add(Crud::PAGE_INDEX, $importCategoryButton)
+             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ;
              
     }
 
-    
-    
+    public function configureCrud( Crud $crud): Crud{
+        return $crud->setEntityPermission('ROLE_ADMIN')
+        ->setSearchFields(['name','id','popularity','language','countryOrigin','size','status'])
+        ->setDefaultSort(['name'=>'ASC'])
+        ->setPaginatorPageSize(5);
+    }
+    public function configureFilters(Filters $filters):Filters
+    {
+        return $filters
+        ->add('name')
+        ->add('countryOrigin')
+        ->add('status')
+        ->add('description')
+        ->add('specialNotes');
+
+
+    }
     public function configureFields(string $pageName): iterable
     {    
         return [
@@ -113,63 +130,163 @@ class CategoryCrudController extends AbstractCrudController
 
     public function importCategory(Request $request)
     {   
+        $err="";
         $category = new Category();
         $form = $this->createForm(ImportType::class, $category);        
         $form->handleRequest($request);
 
         $importedFile = $form->get('import_file')->getData();
         if ($form->isSubmitted() && $importedFile) {
+           $originalname= $importedFile->getClientOriginalName(); 
+              $ext = substr(strrchr($originalname, '.'), 1);
+              
+          if ($ext=="json")
+            {
             $jsonData = file_get_contents($importedFile);
             $entityManager = $this->getDoctrine()->getManager();
             
             try{
                 $postData = json_decode($jsonData);
-                $this->logger->error('file imported.');
-                dump($postData);
+                $this->logger->info('coverted to json.');
+                
+                $row=1;
                 foreach ($postData as $catItem) {
+                    
+                    $err.="ROW NUMBER $row=>";
+                    
                     $newCategory = new Category();
-                    //$this->UserRepository->find($catItem->manager_id);
-                    $this->logger->error('after categ.');
+                    
 
                     $newCategory->setUser($this->getUser());
-                    $this->logger->error('after MANAGER.');
-                    $newCategory->setName($catItem->name);
-                    $this->logger->error('after NAME.');
-                    //$newPost->setPostSlug($this->slugger->slug($postItem->post_title));
-                    $newCategory->setDescription($catItem->description);
-                    $this->logger->error('after desc.');
-                    //$newCategory->setPostType((!empty($catItem->post_type))?$catItem->post_type:'post');
+                    
+                   
+                    if(empty($catItem->name)){
+                         $err.="name missing,";
+                    	  $this->logger->info('name missing,');
+                    }
+                    else{
+                       $newCategory->setName($catItem->name);
+                    }
+                    
+                    
+                   
+                    if(empty($catItem->description)){
+                         $err.="description missing,";
+                    	  $this->logger->info('description missing,');
+                    }
+                    else{
+                         $newCategory->setDescription($catItem->description);
+                    }
+                    
+                   
+                   if(empty($catItem->countryorigin)){
+                         $err.="countryorigin missing,";
+                    	  $this->logger->info('countryorigin missing,');
+                    }
+                    else{
+                        $newCategory->setCountryOrigin($catItem->countryorigin);
+                    }
     
-                    $newCategory->setCountryOrigin($catItem->countryorigin);
-                    $this->logger->error('after country.');
-                    $newCategory->setSize($catItem->size);
-                    $this->logger->error('after size.');
+                    
+                    if(empty($catItem->size)){
+                         $err.="size missing,";
+                    	  $this->logger->info('size missing,');
+                    }
+                    else{
+                        $newCategory->setSize($catItem->size);
+                    }
+                    
+                   
                     $newCategory->setPopularity($catItem->popularity);
-                    $this->logger->error('after popularity.');
-                    $newCategory->setLanguage($catItem->language);
-                    $this->logger->error('after lang.');
-                    $newCategory->setSpecialNotes($catItem->specialnotes);
-                    $this->logger->error('after spec not.');
-                    $newCategory->setAtt1($catItem->att1);
-                    $this->logger->error('after att1');
-                    $newCategory->setAtt2($catItem->att2);
-                    $this->logger->error('after att2.');
-                    $newCategory->setCreated(new \DateTime());
-                    $this->logger->error('after dt1.');
-                    $newCategory->setUpdated(new \DateTime());
-                    $this->logger->error('after dt2.');
-                    //$newCategory->setPostAuthor($this->getUser());
-                    $newCategory->setStatus('1');
+                    if(empty($catItem->popularity)){
+                         $err.="popularity missing,";
+                    	  $this->logger->info('popularity missing,');
+                    }
+                    
+                    
+                    if(empty($catItem->language)){
+                         $err.="language missing,";
+                    	  $this->logger->info('language missing,');
+                    }
+                    else{
+                         $newCategory->setLanguage($catItem->language);
+                      }
+                   
+                    
+                    if(empty($catItem->specialnotes)){
+                         $err.="specialnotes missing,";
+                    	  $this->logger->info('specialnotes missing,');
+                    }
+                    else{
+                        $newCategory->setSpecialNotes($catItem->specialnotes);
+                    }
+                    
+                    
+                    if(empty($catItem->specialnotes)){
+                         $newCategory->setAtt1("other");
+                    }
+                    else{
+                    	  $newCategory->setAtt1($catItem->att1);
+                    }
+                    
+                    
+                    if(empty($catItem->att2)){
+                         $newCategory->setAtt2("other");
+                    }
+                    else{
+                         $newCategory->setAtt2($catItem->att2);
+                    }
+                    
+                    if(empty($catItem->created)){
+                          $newCategory->setCreated(new \DateTime());
+                    }
+                    else{
+                        $newCategory->setCreated($catItem->created);
+                    }
+                    
+                    if(empty($catItem->updated)){
+                          $newCategory->setUpdated(new \DateTime());
+                    }
+                    else{
+                        $newCategory->setUpdated($catItem->updated);
+                    }
+        
+                    
+                   
+                    if(empty($catItem->status)){
+                        $newCategory->setStatus('1');
+                    }
+                    else{
+                        $newCategory->setStatus($catItem->status);
+                    }
 
                     $entityManager->persist($newCategory);
                     $entityManager->flush();
-                }
+                    
+                     $err.="imported successfully<br>";
+                     $row++;
+                    }
 
-                $this->addFlash('success', 'category data imported successfully');
-                $this->logger->info('Data imported', $postData);
-            } catch (\Exception $e){
-                $this->addFlash('error', 'Unable to import data correctly.');
-                $this->logger->error('Unable to import data correctly.');
+                  $this->addFlash('success', 'category data imported successfully');
+                  $this->logger->info('Data imported', $postData);
+                 } catch (\Exception $e){
+                         if($err){
+                         
+                          $this->logger->error("Unable to import data correctly."."$err");
+                          $this->addFlash('error',"Unable to import data correctly some values are missing please check logs");
+                          return $this->render('product/log.html.twig', [
+                                  'page_title' => 'Import logs',
+                                  'back_link' => $this->adminUrlGenerator->setController(CategoryCrudController::class)->setAction(Action::INDEX)->generateUrl(),
+                        'err' => $err
+                         ]);
+                     
+                          }
+                     
+                    }
+              }
+            else{
+              $this->addFlash('error', "expecting json file but .'".$ext."' given");
+              $this->logger->error('wrong extension given');
             }
         }else{
             $this->logger->error('File was not uploaded');

@@ -43,7 +43,7 @@ use Symfony\Bridge\Twig\Mime\NotificationEmail;
         public static function getSubscribedEvents(){
             return [
                 BeforeEntityPersistedEvent::class => ['setDatetime'],
-               // AfterEntityPersistedEvent::class => ['sendMail'],
+                AfterEntityPersistedEvent::class => ['sendMail'],
     
             ];
         }
@@ -64,34 +64,34 @@ use Symfony\Bridge\Twig\Mime\NotificationEmail;
             return;
         }
 
-        // public function sendMail(AfterEntityPersistedEvent $event)
-        // {   
-        //     $entity = $event->getEntityInstance();
-        //    // $entity->setStatus("pending");
-        //     //send mail after product assign to manager 
-        //     if ($entity instanceof Product){
+//         public function sendMail(AfterEntityPersistedEvent $event)
+//         {   
+//             $entity = $event->getEntityInstance();
+//            // $entity->setStatus("pending");
+//             //send mail after product assign to manager 
+//             if ($entity instanceof Product){
 
-        //     //   $this->mailer->send((new NotificationEmail())
-        //     //   ->subject('New product assigned')
-        //     //   ->htmlTemplate('emails/notify.html.twig')
-        //     //   ->from($this->adminEmail)
-        //     //   ->to($this->adminEmail)
-        //     //   //->to($entity->setStatus("pending")
-        //     //   //->context(['comment' => "new Product assigned to you please review."])
-        //     //   );
+//             //   $this->mailer->send((new NotificationEmail())
+//             //   ->subject('New product assigned')
+//             //   ->htmlTemplate('emails/notify.html.twig')
+//             //   ->from($this->adminEmail)
+//             //   ->to($this->adminEmail)
+//             //   //->to($entity->setStatus("pending")
+//             //   //->context(['comment' => "new Product assigned to you please review."])
+//             //   );
                 
-        //     $email = (new Email())
-        //     ->from('aadeshsharma9991@gmail.com')
-        //     ->to('aadeshsharma9991@gmail.com')
-        //     ->subject('New product assigned')
-        //     ->text('PIM please visit the site!')
-        //     ->html('<p>This is system generated mail .</p>');
+//             $email = (new Email())
+//             ->from('aadeshsharma9991@gmail.com')
+//             ->to('aadeshsharma9991@gmail.com')
+//             ->subject('New product assigned')
+//             ->text('PIM please visit the site!')
+//             ->html('<p>PIM please visit the site!.</p>');
 
-        //  $this->mailer->send($email);
+//          $this->mailer->send($email);
 
-        //     }
+//             }
 
         
-       // }
+//    }
         
     }

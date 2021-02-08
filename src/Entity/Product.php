@@ -90,12 +90,12 @@ class Product
     private $tax;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float")
      */
     private $deliveryCharges;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float")
      */
     private $discount;
 
@@ -277,12 +277,12 @@ class Product
         return $this;
     }
 
-    public function getDeliveryCharges(): ?int
+    public function getDeliveryCharges(): ?float
     {
         return $this->deliveryCharges;
     }
 
-    public function setDeliveryCharges(int $deliveryCharges): self
+    public function setDeliveryCharges(float $deliveryCharges): self
     {
         $this->deliveryCharges = $deliveryCharges;
 
@@ -373,12 +373,12 @@ class Product
         return $this->name;
     }
 
-    public function getDiscount(): ?int
+    public function getDiscount(): ?float
     {
         return $this->discount;
     }
 
-    public function setDiscount(int $discount): self
+    public function setDiscount(float $discount): self
     {
         $this->discount = $discount;
 

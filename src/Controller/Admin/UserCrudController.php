@@ -35,8 +35,14 @@ class UserCrudController extends AbstractCrudController
             ArrayField::new('roles'),
         ];
 
+        
 
-
+    }
+    public function configureCrud( Crud $crud): Crud{
+        return $crud->setEntityPermission('ROLE_ADMIN')
+        ->setSearchFields(['email','id',])
+        ->setDefaultSort(['email'=>'ASC'])
+        ->setPaginatorPageSize(5);
     }
     
 }

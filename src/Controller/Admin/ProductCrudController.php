@@ -14,6 +14,7 @@ use App\Form\ImportType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
@@ -62,6 +63,7 @@ class ProductCrudController extends AbstractCrudController
                  //  ->setPermission(Action::EDIT, 'ROLE_MANAGER')
                   ->add(Crud::PAGE_INDEX, $exportProductButton)
                   ->add(Crud::PAGE_INDEX, $importProductButton)
+                  ->add(Crud::PAGE_INDEX, Action::DETAIL)
                  ;
              
     }
@@ -77,8 +79,7 @@ class ProductCrudController extends AbstractCrudController
             TextField::new('shortDescription'),
             TextField::new('longDescription'),
             ImageField::new('post_thumbnail')->setLabel('Image')->setBasePath($uploadPath['uploads']['url_prefix'])->setUploadDir($uploadPath['uploads']['url_path'])->setRequired(false),
-            NumberField::new('height')->setLabel('height in cm'),
-            NumberField::new('width')->setLabel('width in cm'),
+        
             TextField::new('color'),
             TextField::new('brand'),
             NumberField::new('price')->setLabel('price in rs.'),
@@ -95,103 +96,286 @@ class ProductCrudController extends AbstractCrudController
                 'Reviewed' => 'reviewed',
                 'Published' => 'published'
             ])->setRequired('False'),
-            
+            NumberField::new('height')->setLabel('height in cm'),
+            NumberField::new('width')->setLabel('width in cm'),
             //DateTimeField::new('created')->hideOnForm(),
             //DateTimeField::new('updated')->hideOnForm(),    
         ];
 
     
     }
+    public function configureCrud( Crud $crud): Crud{
+        return $crud->setEntityPermission('ROLE_ADMIN')
+        ->setSearchFields(['name','color','brand','quality'])
+        ->setDefaultSort(['name'=>'DESC'])
+        ->setPaginatorPageSize(5);
+    }
+    public function configureFilters(Filters $filters):Filters
+    {
+        return $filters
+        ->add('name')
+        ->add('category')
+        ->add('user')
+        ->add('quality')
+        ->add('brand')
+        ->add('price')
+        ->add('tax')
+        ->add('deliveryCharges')
+        ->add('discount')
+        ->add('color')
+        ->add('status')
+        ->add('created')
+        ->add('updated')
+        ;
+
+    }
 
     public function importProduct(Request $request)
-    {
+    {   
+        $err="";
+        
         $products = new Product();
         $form = $this->createForm(ImportType::class, $products);        
         $form->handleRequest($request);
 
         $importedFile = $form->get('import_file')->getData();
+        
+             
+        
+      
         if ($form->isSubmitted() && $importedFile) {
+              $originalname= $importedFile->getClientOriginalName(); 
+              $ext = substr(strrchr($originalname, '.'), 1);
+              
+          if ($ext=="json")
+            {  
             $jsonData = file_get_contents($importedFile);
             $entityManager = $this->getDoctrine()->getManager();
             
             try{
                 $postData = json_decode($jsonData);
-                $this->logger->info('file imported.');
-                dump($postData);
+            
+                $row=1;
+                
                 foreach ($postData as $prodItem) {
                     $newprod= new Product();
-
-                    $category = $this->CategoryRepository->find($prodItem->category_id);
-                
-                    $newprod->setUser($this->getUser());
-                    $this->logger->info('after manager.');
-     
-                    if(!empty($category)){
-                        $newprod->setCategory($category);
-                    }
-                    $this->logger->info('after category.');
-                    $newprod->setName($prodItem->name);
-
-                    $this->logger->info('after name.');
-                    $newprod->setShortDescription($prodItem->shortdescription);
-
-                    $this->logger->info('after shortdesc.');
-                    $newprod->setLongDescription($prodItem->longdescription);
-
-                    $this->logger->info('after long desc.');
-                    $newprod->setHeight($prodItem->height);
-
-                    $this->logger->info('after height.');
-                    $newprod->setWidth($prodItem->width);
-
-                    $this->logger->info('after width.');
-                    $newprod->setColor($prodItem->color);
-
-                    $this->logger->info('after color.');
-                    $newprod->setStatus($prodItem->status);
-
-                    $this->logger->info('after status.');
-                    $newprod->setBrand($prodItem->brand);
-
-                    $this->logger->info('after brand.');
-                    $newprod->setDeliveryCharges($prodItem->deliverycharges);
-
-                    $this->logger->info('after del cahrg.');
-                    $newprod->setDiscount($prodItem->discount);
-
-                    $this->logger->info('after discount.');
-                    $newprod->setCreated(new \DateTime());
-
-                    $this->logger->info('after created.');
-                    $newprod->setUpdated(new \DateTime());
-
-                    $this->logger->info('after update');
-                    $newprod->setPostThumbnail($prodItem->thumbnail);
-
-                    $this->logger->info('after thumnail.');
-                    $newprod->setImage('image.jpg');
-
-                    $this->logger->info('after image');
-                    $newprod->setPrice($prodItem->price);
-
-                    $this->logger->info('after price.');
-                    $newprod->setQuality($prodItem->quality);
-
-                    $this->logger->info('after quality');
                     
-                    $newprod->setTax($prodItem->tax);
-                    $this->logger->info('after tax.');
-
+                  
+                    //$err="";
+                    $err.="ROW NUMBER $row=>";
+                    
+                    $newprod->setUser($this->getUser());
+                    
+                    
+                    if(empty($prodItem->category_id)){
+                        $newprod->setCategory('13');
+                    }
+                    else{
+                        $category = $this->CategoryRepository->find($prodItem->category_id);
+                        if($category)
+                        { $newprod->setCategory($category);}
+                        else{ $newprod->setCategory('13'); }
+                    }
+                    
+                    
+                    
+                    
+                    if(empty($prodItem->name)){
+                    	$err.=" name missing,";
+                    	$this->logger->info('name missing,');
+                    }
+                    else{
+                       $newprod->setName($prodItem->name);
+                    }
+                    
+                    
+                    if(empty($prodItem->shortdescription)){
+                    	$err.=" shortdescription missing,";
+                    	$this->logger->info('shortdescription missing.');
+                    }
+                    else{
+                      $newprod->setShortDescription($prodItem->shortdescription);
+                    }
+                    
+                  
+                    
+                    if(empty($prodItem->longdescription)){
+                    	$err.=" longdescription missing,";
+                    	$this->logger->info('long description missing.');
+                    }
+                    else{
+                       $newprod->setLongDescription($prodItem->longdescription);
+                    }
+                    
+		   
+		     
+                    if(empty($prodItem->height)){
+                    	$err.=" height missing,";
+                    	$this->logger->info('height missing.');
+                    }
+                    else{
+                    	$newprod->setHeight($prodItem->height);
+                    }
+                    
+		     
+		    
+		    if(empty($prodItem->width)){
+                    	$err.=" width missing,";
+                    	$this->logger->info('width missing,');
+                    }
+                    else{
+                       $newprod->setWidth($prodItem->width);
+                    }
+                   
+                   
+                   
+                    if(empty($prodItem->color)){
+                    	$err.=" color missing,";
+                    	$this->logger->info('color missing,');
+                    }
+                    else{
+                       $newprod->setColor($prodItem->color);
+                    }
+                   
+		     
+		     if(empty($prodItem->status)){
+                    	$newprod->setStatus('1');
+                    }
+                    else{
+                       $newprod->setStatus($prodItem->status);
+                    }
+		     
+		    
+		     
+		     if(empty($prodItem->brand)){
+                    	$err.=" brand missing,";
+                    	$this->logger->info('brand missing');
+                    }
+                    else{
+                       $newprod->setBrand($prodItem->brand);
+                    }
+                    
+		     
+		     
+		     if(empty($prodItem->deliverycharges)){
+                    	$err.=" delivery charges missing,";
+                    	$this->logger->info('delivery charges missing,');
+                    }
+                    else{
+                      $newprod->setDeliveryCharges($prodItem->deliverycharges);
+                    }
+                    
+		      
+		     
+		     if(empty($prodItem->discount)){
+                    	$err.=" discount missing,";
+                    	$this->logger->info('discount missing,');
+                    }
+                    else{
+                       $newprod->setDiscount($prodItem->discount);
+                    }
+                    
+                    
+		     
+                     
+                    
+                    if(empty($prodItem->thumbnail)){
+                    	$newprod->setPostThumbnail('pic17.jpeg');
+                    }
+                    else{
+                       $newprod->setPostThumbnail($prodItem->thumbnail);
+                    }
+                    
+                    
+                    if(empty($prodItem->image)){
+                    	$newprod->setImage('image.jpg');
+                    }
+                    else{
+                       $newprod->setImage($prodItem->image);
+                    }
+                    
+		      
+		     
+		    if(empty($prodItem->price)){
+                    	$err.=" price missing,";
+                       $this->logger->info('price missing,');
+                    }
+                    else{
+                       $newprod->setPrice($prodItem->price);
+                    }
+            
+            
+		   if(empty($prodItem->quality)){
+                    	$newprod->setQuality("none");
+                    }
+                   else{
+                       $newprod->setQuality($prodItem->quality);
+                   } 
+                   
+                  
+                    
+		   if(empty($prodItem->tax)){
+                    	$err.=" tax missing,";
+                    	$this->logger->info('tax missing.');
+                    }
+                   else{
+                       $newprod->setTax($prodItem->tax); 
+                    }
+                    
+                     
+                     
+                    if(empty($prodItem->created)){
+                          $newprod->setCreated(new \DateTime());
+                     }
+                    else{
+                        $newprod->setCreated($catItem->created);
+                    }
+                    
+                     
+                    
+                    if(empty($prodItem->updated)){
+                          $newprod->setUpdated(new \DateTime());
+                    }
+                    else{
+                        $newprod->setUpdated($catItem->updated);
+                    }
+                    
+                   
+                   
                     $entityManager->persist($newprod);
                     $entityManager->flush();
-                }
+                    
+                    $err.="imported successfully<br>";
+                    $row++;
+                    
+                    
+                  }
+                  
+                  
 
-                $this->addFlash('success', 'product data imported successfully');
-                $this->logger->info('Data imported', $postData);
-            } catch (\Exception $e){
-                $this->addFlash('error', 'Unable to import data correctly.');
-                $this->logger->error('Unable to import data correctly.');
-            }
+                  $this->addFlash('success', 'product data imported successfully');
+                  $this->logger->info('Data imported', $postData);
+                } catch (\Exception $e){
+                   
+                    
+                     if($err){
+                         
+                          $this->logger->error("Unable to import data correctly."."$err");
+                          $this->addFlash('error',"Unable to import data correctly some values are missing please check logs");
+                          return $this->render('product/log.html.twig', [
+                                  'page_title' => 'Import logs',
+                                  'back_link' => $this->adminUrlGenerator->setController(ProductCrudController::class)->setAction(Action::INDEX)->generateUrl(),
+                        'err' => $err
+                         ]);
+                     
+                   }
+               }
+             }  
+           else{
+             $this->addFlash('error', "expecting json file but .'".$ext."' given");
+             $this->logger->error('wrong extension given');
+            } 
+            
         }else{
             $this->logger->error('File was not uploaded');
         }
@@ -231,3 +415,6 @@ class ProductCrudController extends AbstractCrudController
     
     
 }
+
+
+

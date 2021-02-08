@@ -15,6 +15,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            #access_denied_handler: App\Security\AccessDeniedHandler
             anonymous: true
             lazy: true
             provider: app_user_provider
@@ -39,4 +40,4 @@ security:
          - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: ^/category, roles: ROLE_MANAGER }
          - { path: ^/product, roles: ROLE_MANAGER }
-         - { path: ^/categoryapi, roles: IS_AUTHENTICATED_FULLY }
+         #- { path: ^/api, roles: ROLE_ADMIN}

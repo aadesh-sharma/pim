@@ -13,22 +13,43 @@ class ProductType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+       
+
+
         $builder
-            ->add('name')
-            ->add('post_thumbnail')
-            ->add('shortDescription')
-            ->add('longDescription')
-            ->add('height')
-            ->add('width')
-            ->add('color')
+            ->add('name',null,[
+                'attr'=>['class'=>'form-control']
+            ])
+            ->add('post_thumbnail',null,[
+                'attr'=>['class'=>'form-control']
+            ])
+            ->add('shortDescription',null,[
+                'attr'=>['class'=>'form-control']
+            ])
+            ->add('longDescription',null,[
+                'attr'=>['class'=>'form-control']
+            ])
+            ->add('height',null,[
+                'attr'=>['class'=>'form-control']
+            ])
+            ->add('width',null,[
+                'attr'=>['class'=>'form-control']
+            ])
+            ->add('color',null,[
+                'attr'=>['class'=>'form-control']
+            ])
             //->add('status')
             ->add('status', ChoiceType::class , [
                 'choices' => [
                     'Reviewed' => 'reviewed',
                     'Published' => 'published'
                 ]])
-            ->add('brand')
-            ->add('price')
+            ->add('brand',null,[
+                'attr'=>['class'=>'form-control']
+            ])
+            ->add('price',null,[
+                'attr'=>['class'=>'form-control']
+            ])
            // ->add('quality')
             ->add('quality', ChoiceType::class , [
                 'choices' => [
@@ -36,11 +57,21 @@ class ProductType extends AbstractType
                     'Average' => 'average',
                     'High' => 'high'
                 ]])
-            ->add('tax')
-            ->add('deliveryCharges')
-            ->add('discount')
-            ->add('created')
-            ->add('updated')
+            ->add('tax',null,[
+                'attr'=>['class'=>'form-control']
+            ])
+            ->add('deliveryCharges',null,[
+                'attr'=>['class'=>'form-control']
+            ])
+            ->add('discount',null,[
+                'attr'=>['class'=>'form-control']
+            ])
+            // ->add('created',null,[
+            //     'attr'=>['class'=>'form-control']
+            // ])
+            // ->add('updated',null,[
+            //     'attr'=>['class'=>'form-control']
+            // ])
             //->add('image')
             //->add('category')
             //->add('manager')

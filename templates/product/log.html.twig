@@ -1,0 +1,10 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block page_title %}{{page_title}}{% endblock %}
+{% block page_actions %}
+    <a href={{back_link}} class="btn btn-primary" >Back</a>
+{% endblock %}
+{% block page_content %}
+    {{err|raw}}
+       
+{% endblock %}

@@ -72,7 +72,9 @@ class ProductRepository extends ServiceEntityRepository
               $image ,
              $thumbnail
             )
-    { 
+    {   
+        
+        
         $newproduct= new Product();
         $newproduct
             ->setName($name)
@@ -94,16 +96,34 @@ class ProductRepository extends ServiceEntityRepository
             ->setUser($user)
             ->setCreated(new \DateTime())
             ->setUpdated(new \DateTime());
-
+          
+          
 
 
             $this->manager->persist($newproduct);
             $this->manager->flush();
     }
 
-   public function updateProduct(Product $product, $data,$user,$category)
-   {
-        $product->setName($data['name']);
+   public function updateProduct(Product $product,  $user,
+              $category,
+              $name ,
+              $shortdescription,
+              $longdescription ,
+              $height,
+              $width ,
+              $color ,
+              $status,
+              $brand ,
+              $price,
+              $quality,
+              $tax ,
+              $deliverycharges,
+              $discount,
+              $image ,
+             $thumbnail)
+        {
+        
+        /*$product->setName($data['name']);
         $product->setShortDescription($data['shortdescription']);
         $product->setLongDescription($data['longdescription']);
         $product->setHeight($data['height']);
@@ -122,7 +142,31 @@ class ProductRepository extends ServiceEntityRepository
         $product->setUser($user);
         $product->setCreated(new \DateTime());
         $product->setUpdated(new \DateTime());
-
+      */
+      
+      
+         $product
+            ->setName($name)
+            ->setShortDescription($shortdescription)
+            ->setLongDescription($longdescription)
+            ->setHeight($height)
+            ->setWidth($width)
+            ->setColor($color)
+            ->setStatus($status)
+            ->setBrand($brand)
+            ->setPrice($price)
+            ->setQuality($quality)
+            ->setTax($tax)
+            ->setDeliveryCharges($deliverycharges)
+            ->setDiscount($discount)
+            ->setImage($image)
+            ->setPostThumbnail($thumbnail)
+            ->setCategory($category)
+            ->setUser($user)
+            ->setCreated(new \DateTime())
+            ->setUpdated(new \DateTime());
+          
+          
         $this->manager->flush();
     }
 

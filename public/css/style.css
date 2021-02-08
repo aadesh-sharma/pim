@@ -1,0 +1,30 @@
+body {
+  background-image: url('/img/bg2.png');
+  
+  background-attachment: fixed;
+  background-size: cover;
+}
+.navbar{
+    background-color:black;
+}
+nav .navbar-nav li a{
+    color:rgb(226, 215, 215) !important;
+    }
+  
+
+nav .navbar-nav li a:hover{
+    color:blue !important;
+    border-bottom: 2px solid blue;
+    font-size: 20px;
+}
+#fgps{
+    color:red;
+} 
+.welcome{
+    margin-top:30px;
+    font-size: 80px;
+}
+
+tr:nth-child(even) {
+        background-color: #b3aaaa;
+}
